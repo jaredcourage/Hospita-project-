@@ -1,0 +1,164 @@
+<!------ the footer section -->
+
+
+
+
+
+<section class="f-secon">
+<footer>
+    <div class="footer-container">
+    
+    
+    <div class="footer-logo">
+    <img src="/images /nj.png">
+    </div>
+
+    <div class="line-divider"></div>
+    
+    <div class="footer-contact">
+
+        <ul class="footer-list">
+         <li><a>Cura Solace Healthcare Centre</a></li>   
+         <li><a>76 Stuart Street </a></li>   
+         <li><a>Kingston Ontario </a></li>
+         <li><a>K7L 2V7</a></li>
+        </ul>
+
+        <ul class="footer-list">
+            <li><a>General Inquiries</a></li>   
+            <li><a>613-548-3232  </a></li>   
+            <li><a>613-549-6666 auto attendant  </a></li>
+            <li><a>K7L 2V7</a></li>
+           </ul>
+
+    </div>
+
+    <div class="line-divider"></div>
+  
+
+    <div class="footer-contact">
+
+        <ul class="footer-list">
+         <li><a>Our Toll Free Number</a></li>   
+         <li><a>1-800-567-5722</a></li>   
+        </ul>
+
+        <ul class="footer-list">
+            <li><a>Urgent Care Centre</a></li>   
+            <li><a>613-546-1240 </a></li>   
+            <li><a>Opens at 8:00 a.m. Closing hours vary. </a></li>
+             <li><a>K7L 2V7</a></li>
+           </ul>
+
+    </div>
+
+
+    <div class="line-divider"></div>
+
+    <div class="footer-contact">
+
+        <ul class="footer-list">
+         <li><a>Cura Solace Healthcare Centre</a></li>   
+         <li><a>76 Stuart Street </a></li>   
+         <li><a>Kingston Ontario </a></li>
+         <li><a>K7L 2V7</a></li>
+        </ul>
+
+        <ul class="footer-list">
+            <li><a>General Inquiries</a></li>   
+            <li><a>613-548-3232  </a></li>   
+            <li><a>613-549-6666 auto attendant  </a></li>
+            <li><a>K7L 2V7</a></li>
+           </ul>
+
+    </div>
+
+    <div class="clearfix"></div>
+
+      <!---- the social icon -->
+
+      <div class="social-icon">
+
+        <i class="fa-brands fa-instagram fa-2xl" style="color: #FFff;"></i>
+        <i class="fa-brands fa-square-facebook fa-2xl" style="color: white;"></i>
+        <i class="fa-brands fa-x-twitter fa-2xl" style="color: white;"></i>
+        <i class="fa-brands fa-youtube fa-2xl" style="color: white;"></i>
+    </div>
+
+    <!---- the social icon ending -->
+
+
+
+
+<!---- the image for assiocation-->
+
+
+<div class="footer-icon-div">
+
+<div class="footer-assio">
+
+<img src="/images /Australian+Community+Aged+care+(4).jpg">
+
+</div>
+
+
+
+<div class="footer-assio">
+
+    <img src="/images /Canadian-Home-Care-Association-logo.png">
+      
+      </div>
+
+
+
+<div class="footer-assio">
+
+  <img src="/images /assiociation 2.png">
+    
+    </div>
+
+
+    <div class="footer-assio">
+
+        <img src="/images /CaregiversNB_logo_BIL.png">
+          
+          </div>
+      
+         
+</div>
+<div class="clearfix"></div>
+<div class="line-divider-2"></div>
+
+
+
+<div class="footer-last-section-div">
+
+    <div class="bach">
+      <p>CSH  is located on the ancestral lands In Australia & Canada </p>
+    
+    </div>
+    
+    <div class="list-foot">
+    <ul>
+      <li><a>@ CuraSolace Healthcare Sciences Centre, 2025. All rights reserved.</a></li>
+      <li><a>Auto Shift Fill</a></li>  
+      <li><a>Board Portal</a></li>
+      <li><a>Career Hub</a></li>   
+      <li><a>Employee Self Service</a></li>
+      <li><a>CSH Policies</a></li>
+      <li><a>ServiceNow </a></li>
+      <li><a>Terms and Conditions</a></li>
+      <li><a>Webmail Access</a></li>
+    </ul>
+    </div>
+    
+    
+    
+    </div>
+    
+    </div>
+    </footer>
+</section>
+
+
+
