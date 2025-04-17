@@ -779,3 +779,115 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+////toggle menu codes
+
+
+
+
+const toggle = document.getElementById('menuToggle');
+    const text = document.getElementById('toggleText');
+    const icon = document.getElementById('toggleIcon');
+    const menu = document.getElementById('menuList');
+
+    toggle.addEventListener('click', () => {
+      menu.classList.toggle('show');
+
+      if (menu.classList.contains('show')) {
+        text.textContent = 'hide menu';
+        icon.textContent = '–'; // Minus icon
+      } else {
+        text.textContent = 'show menu';
+        icon.textContent = '+'; // Plus icon
+      }
+    });
+
+
+    //////departments codes 
+
+
+    const resources = [
+        { type: "Factsheet", title: "Your Guide to the Esophagogastric Diagnostic Assessment Program (EDAP)" },
+        { type: "Factsheet", title: "Coping With Cancer: Financial Concerns" },
+        { type: "Factsheet", title: "Coping with Cancer" },
+        { type: "Factsheet", title: "Your Guide to the Colorectal Diagnostic Assessment Program" },
+        { type: "Guideline", title: "Activity Guidelines - Active ROM exercises" },
+        { type: "Instructions", title: "Post-Operative Instructions for Same-Day Hip/Knee Replacement Surgery" },
+        { type: "Pamphlet", title: "Immune checkpoint inhibitor presentation" },
+        { type: "Pamphlet", title: "Symptom Management - Care at Home" },
+        { type: "Pamphlet", title: "Fertility Preservation" },
+        { type: "Pamphlet", title: "Fluid Needs During Cancer Treatment" },
+        { type: "Pamphlet", title: "Hair Pieces and Accessories" },
+        { type: "Pamphlet", title: "Lymphedema Management Services" },
+        { type: "Pamphlet", title: "Oral Cancer Treatment Care Plan" },
+        { type: "Pamphlet", title: "Hazardous Drugs and Safety in the Home" },
+        { type: "Pamphlet", title: "Getting to the Cancer Centre - Transportation and Accommodation" },
+        { type: "Factsheet", title: "\"Your Symptoms Matter\" information sheet" },
+        { type: "Factsheet", title: "The day before your surgery or procedure - Day Surgery" },
+        { type: "Booklet", title: "Patient and Family Guide to Heart Surgery" },
+        { type: "Booklet", title: "Transcatheter Aortic Valve Replacement/Implantation (TAVI)" },
+        { type: "Booklet", title: "When a loved one dies in hospital" },
+      ];
+      
+      const resourceGrid = document.getElementById("resourceGrid");
+      
+      function renderResources(items) {
+        resourceGrid.innerHTML = "";
+        items.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="card-type">${item.type}</div>
+            <a class="card-title" href="#">${item.title}</a>
+            <a class="download-btn" href="#">Download now</a>
+          `;
+          resourceGrid.appendChild(card);
+        });
+      }
+      
+      // Initial render
+      renderResources(resources);
+      
+      // Filters (dummy for now)
+      document.getElementById("applyFilters").addEventListener("click", () => {
+        // In a real app, you'd filter the array based on selections
+        renderResources(resources); // Currently just re-renders all
+      });
+      
+
+
+
+      /////// the cousrsel codes 
+
+      
+
+   
+      let slideIndex = 0;
+      const slides = document.querySelectorAll('.carousel-item');
+      const dots = document.querySelectorAll('.dot');
+      const titles = ['Compassion', 'Partnership'];
+      
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+          dots[i].classList.toggle('active', i === index);
+        });
+        document.getElementById('featured-title').textContent = titles[index];
+        slideIndex = index;
+      }
+      
+      function nextSlide() {
+        slideIndex = (slideIndex + 1) % slides.length;
+        showSlide(slideIndex);
+      }
+      
+      function prevSlide() {
+        slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+        showSlide(slideIndex);
+      }
+      
+      function setSlide(index) {
+        showSlide(index);
+      }
+      

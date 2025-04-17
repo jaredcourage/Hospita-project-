@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Tracking Page</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .status {
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .status:before {
+      content: "";
+      height: 6px;
+      background: #ccc;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 100%;
+      z-index: 0;
+      transform: translateX(-50%);
+    }
+
+    .status .circle {
+      background: #ccc;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status.active .circle {
+      background: #00b894;
+    }
+
+    .status label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .info-box {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    #map {
+      height: 300px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .status-bar {
+      text-align: center;
+      font-size: 18px;
+      color: #00b894;
+      margin-bottom: 10px;
+    }
+
+    .tracking-input {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .tracking-input input {
+      padding: 10px;
+      width: 60%;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .tracking-input button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00b894;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Product Tracking Page</h2>
+
+    <div class="tracking-input">
+      <input type="text" id="trackingNumber" placeholder="Enter your tracking number..." />
+      <button onclick="loadTracking()">Track</button>
+    </div>
+
+    <div class="info-box">
+      <div><strong>product #:</strong> <span id="productID">-</span></div>
+      <div><strong>Status:</strong> <span id="orderStatus" class="status-bar">-</span></div>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <!-- Timeline steps will be injected -->
+    </div>
+
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const statuses = [
+      { name: "Product Placed", date: "2025-04-01" },
+      { name: "In Production", date: "2025-04-02" },
+      { name: "Ocean Transit", date: "2025-04-04" },
+      { name: "Shipping Final Mile", date: "2025-04-07" },
+      { name: "Delivered", date: "2025-04-10" }
+    ];
+
+    const locationMap = {
+      "Product Placed": [40.7608, -111.8910],
+      "In Production": [41.8781, -87.6298],
+      "Ocean Transit": [39.7392, -104.9903],
+      "Shipping Final Mile": [40.5853, -105.0844],
+      "Delivered": [40.0150, -105.2705]
+    };
+
+    let map, marker;
+
+    function loadTracking() {
+      const trackingNumber = document.getElementById("trackingNumber").value.trim();
+      if (!trackingNumber) return alert("Please enter a tracking number.");
+
+      // Simulate fetching tracking info from backend
+      const fakeData = {
+        productID: "#1606" + "#100",
+        currentStatus: "Delivered"
+      };
+
+      document.getElementById("productID").textContent = fakeData.orderID;
+      document.getElementById("orderStatus").textContent = fakeData.currentStatus;
+
+      updateTimeline(fakeData.currentStatus);
+      updateMap(fakeData.currentStatus);
+    }
+
+    function updateTimeline(currentStatus) {
+      const timeline = document.getElementById("timeline");
+      timeline.innerHTML = "";
+
+      statuses.forEach(status => {
+        const isActive = statuses.findIndex(s => s.name === currentStatus) >= statuses.findIndex(s => s.name === status.name);
+        const statusDiv = document.createElement("div");
+        statusDiv.className = `status ${isActive ? "active" : ""}`;
+        statusDiv.innerHTML = `<div class="circle"></div><label>${status.name}<br><small>${status.date}</small></label>`;
+        timeline.appendChild(statusDiv);
+      });
+    }
+
+    function updateMap(status) {
+      const coords = locationMap[status];
+      if (!map) {
+        map = L.map("map").setView(coords, 5);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+        marker = L.marker(coords).addTo(map);
+      } else {
+        map.setView(coords, 6);
+        marker.setLatLng(coords);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Tracking Page</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .status {
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .status:before {
+      content: "";
+      height: 6px;
+      background: #ccc;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 100%;
+      z-index: 0;
+      transform: translateX(-50%);
+    }
+
+    .status .circle {
+      background: #ccc;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status.active .circle {
+      background: #00b894;
+    }
+
+    .status label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .info-box, .shipper-receiver-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .info-box div, .shipper-receiver-info div {
+      flex: 1;
+      text-align: center;
+    }
+
+    #map {
+      height: 300px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .status-bar {
+      text-align: center;
+      font-size: 18px;
+      color: #00b894;
+      margin-bottom: 10px;
+    }
+
+    .tracking-input {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .tracking-input input {
+      padding: 10px;
+      width: 60%;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .tracking-input button {
+      margin-left: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00b894;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .product-info {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .product-info div {
+      width: 48%;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Product Tracking Page</h2>
+
+    <div class="tracking-input">
+      <input type="text" id="trackingNumber" placeholder="Enter your tracking number..." />
+      <button onclick="loadTracking()">Track</button>
+    </div>
+
+    <div class="info-box">
+      <div><strong>Product #:</strong> <span id="productID">-</span></div>
+      <div><strong>Status:</strong> <span id="orderStatus" class="status-bar">-</span></div>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <!-- Timeline steps will be injected -->
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Shipper and Receiver Information -->
+    <div class="shipper-receiver-info">
+      <div>
+        <strong>Shipper:</strong>
+        <p id="shipperName">-</p>
+        <p id="shipperAddress">-</p>
+      </div>
+      <div>
+        <strong>Receiver:</strong>
+        <p id="receiverName">-</p>
+        <p id="receiverAddress">-</p>
+      </div>
+    </div>
+
+    <!-- Product Information -->
+    <div class="product-info">
+      <div>
+        <strong>Product Name:</strong>
+        <p id="productName">-</p>
+        <strong>Category:</strong>
+        <p id="productCategory">-</p>
+      </div>
+      <div>
+        <strong>Weight:</strong>
+        <p id="productWeight">-</p>
+        <strong>Dimensions:</strong>
+        <p id="productDimensions">-</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Sample data for 10 products
+    const products = {
+      '1606100': {
+        productID: '#1606100',
+        currentStatus: 'Ocean Transit',
+        shipper: { name: 'John Doe', address: '123 Shipper St, Singapore' },
+        receiver: { name: 'Jane Smith', address: '456 Receiver Rd, Singapore' },
+        product: { name: 'Smartphone', category: 'Electronics', weight: '200g', dimensions: '15 x 7 x 1 cm' },
+        statusDates: [
+          { name: 'Product Placed', date: '2025-04-01' },
+          { name: 'In Production', date: '2025-04-02' },
+          { name: 'Ocean Transit', date: '2025-04-04' },
+          { name: 'Shipping Final Mile', date: '2025-04-07' },
+          { name: 'Delivered', date: '2025-04-10' }
+        ]
+      },
+      // Add similar objects for other products (1606101 to 1606110)
+    };
+
+    const locationMap = {
+      "Product Placed": [1.3521, 103.8198],
+      "In Production": [1.3521, 103.8198],
+      "Ocean Transit": [1.3521, 103.8198],
+      "Shipping Final Mile": [1.3521, 103.8198],
+      "Delivered": [1.3521, 103.8198]
+    };
+
+    let map, marker;
+
+    function loadTracking() {
+      const trackingNumber = document.getElementById("trackingNumber").value.trim();
+      if (!trackingNumber) return alert("Please enter a tracking number.");
+
+      const productData = products[trackingNumber];
+
+      if (!productData) {
+        return alert('Tracking number not found.');
+      }
+
+      // Display product info
+      document.getElementById("productID").textContent = productData.productID;
+      document.getElementById("orderStatus").textContent = productData.currentStatus;
+      document.getElementById("shipperName").textContent = productData.shipper.name;
+      document.getElementById("shipperAddress").textContent = productData.shipper.address;
+      document.getElementById("receiverName").textContent = productData.receiver.name;
+      document.getElementById("receiverAddress").textContent = productData.receiver.address;
+      document.getElementById("productName").textContent = productData.product.name;
+      document.getElementById("productCategory").textContent = productData.product.category;
+      document.getElementById("productWeight").textContent = productData.product.weight;
+      document.getElementById("productDimensions").textContent = productData.product.dimensions;
+
+      updateTimeline(productData.statusDates, productData.currentStatus);
+      updateMap(productData.currentStatus);
+    }
+
+    function updateTimeline(statuses, currentStatus) {
+      const timeline = document.getElementById("timeline");
+      timeline.innerHTML = "";
+
+      statuses.forEach(status => {
+        const isActive = statuses.findIndex(s => s.name === currentStatus) >= statuses.findIndex(s => s.name === status.name);
+        const statusDiv = document.createElement("div");
+        statusDiv.className = `status ${isActive ? "active" : ""}`;
+        statusDiv.innerHTML = `<div class="circle"></div><label>${status.name}<br><small>${status.date}</small></label>`;
+        timeline.appendChild(statusDiv);
+      });
+    }
+
+    function updateMap(status) {
+      const coords = locationMap[status];
+      if (!map) {
+        map = L.map("map").setView(coords, 5);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+        marker = L.marker(coords).addTo(map);
+      } else {
+        map.setView(coords, 6);
+        marker.setLatLng(coords);
+      }
+    }
+  </script>
+</body>
+</html>
